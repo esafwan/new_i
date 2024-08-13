@@ -10,15 +10,15 @@ app_license = "mit"
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/new_i/css/new_i.css"
-# app_include_js = "/assets/new_i/js/new_i.js"
+# app_include_css = "/assets/crm/css/new_i.css"
+# app_include_js = "/assets/crm/js/new_i.js"
 
 # include js, css files in header of web template
-# web_include_css = "/assets/new_i/css/new_i.css"
-# web_include_js = "/assets/new_i/js/new_i.js"
+# web_include_css = "/assets/crm/css/new_i.css"
+# web_include_js = "/assets/crm/js/new_i.js"
 
 # include custom scss in every website theme (without file extension ".scss")
-# website_theme_scss = "new_i/public/scss/website"
+# website_theme_scss = "crm/public/scss/website"
 
 # include js, css files in header of web form
 # webform_include_js = {"doctype": "public/js/doctype.js"}
@@ -33,11 +33,6 @@ app_license = "mit"
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
-# Svg Icons
-# ------------------
-# include app icons in desk
-# app_include_icons = "new_i/public/icons.svg"
-
 # Home Pages
 # ----------
 
@@ -46,8 +41,12 @@ app_license = "mit"
 
 # website user home page (by Role)
 # role_home_page = {
-# 	"Role": "home_page"
+#	"Role": "home_page"
 # }
+
+website_route_rules = [
+	{"from_route": "/crm/<path:app_path>", "to_route": "crm"},
+]
 
 # Generators
 # ----------
@@ -60,20 +59,20 @@ app_license = "mit"
 
 # add methods and filters to jinja environment
 # jinja = {
-# 	"methods": "new_i.utils.jinja_methods",
-# 	"filters": "new_i.utils.jinja_filters"
+#	"methods": "new_i.utils.jinja_methods",
+#	"filters": "new_i.utils.jinja_filters"
 # }
 
 # Installation
 # ------------
 
-# before_install = "new_i.install.before_install"
-# after_install = "new_i.install.after_install"
+before_install = "new_i.install.before_install"
+after_install = "new_i.install.after_install"
 
 # Uninstallation
 # ------------
 
-# before_uninstall = "new_i.uninstall.before_uninstall"
+before_uninstall = "new_i.uninstall.before_uninstall"
 # after_uninstall = "new_i.uninstall.after_uninstall"
 
 # Integration Setup
@@ -103,52 +102,61 @@ app_license = "mit"
 # Permissions evaluated in scripted ways
 
 # permission_query_conditions = {
-# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
+#	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
 # }
 #
 # has_permission = {
-# 	"Event": "frappe.desk.doctype.event.event.has_permission",
+#	"Event": "frappe.desk.doctype.event.event.has_permission",
 # }
 
 # DocType Class
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+	"Contact": "new_i.overrides.contact.CustomContact",
+	"Email Template": "new_i.overrides.email_template.CustomEmailTemplate",
+}
 
 # Document Events
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+	"Contact": {
+		"validate": ["new_i.api.contact.validate"],
+	},
+	"ToDo": {
+		"after_insert": ["new_i.api.todo.after_insert"],
+	},
+	"Comment": {
+		"on_update": ["new_i.api.comment.on_update"],
+	},
+	"WhatsApp Message": {
+		"validate": ["new_i.api.whatsapp.validate"],
+		"on_update": ["new_i.api.whatsapp.on_update"],
+	},
+}
 
 # Scheduled Tasks
 # ---------------
 
 # scheduler_events = {
-# 	"all": [
-# 		"new_i.tasks.all"
-# 	],
-# 	"daily": [
-# 		"new_i.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"new_i.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"new_i.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"new_i.tasks.monthly"
-# 	],
+#	"all": [
+#		"new_i.tasks.all"
+#	],
+#	"daily": [
+#		"new_i.tasks.daily"
+#	],
+#	"hourly": [
+#		"new_i.tasks.hourly"
+#	],
+#	"weekly": [
+#		"new_i.tasks.weekly"
+#	],
+#	"monthly": [
+#		"new_i.tasks.monthly"
+#	],
 # }
 
 # Testing
@@ -160,14 +168,14 @@ app_license = "mit"
 # ------------------------------
 #
 # override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "new_i.event.get_events"
+#	"frappe.desk.doctype.event.event.get_events": "new_i.event.get_events"
 # }
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
 # along with any modifications made in other Frappe apps
 # override_doctype_dashboards = {
-# 	"Task": "new_i.task.get_dashboard_data"
+#	"Task": "new_i.task.get_dashboard_data"
 # }
 
 # exempt linked doctypes from being automatically cancelled
@@ -193,37 +201,29 @@ app_license = "mit"
 # --------------------
 
 # user_data_fields = [
-# 	{
-# 		"doctype": "{doctype_1}",
-# 		"filter_by": "{filter_by}",
-# 		"redact_fields": ["{field_1}", "{field_2}"],
-# 		"partial": 1,
-# 	},
-# 	{
-# 		"doctype": "{doctype_2}",
-# 		"filter_by": "{filter_by}",
-# 		"partial": 1,
-# 	},
-# 	{
-# 		"doctype": "{doctype_3}",
-# 		"strict": False,
-# 	},
-# 	{
-# 		"doctype": "{doctype_4}"
-# 	}
+#	{
+#		"doctype": "{doctype_1}",
+#		"filter_by": "{filter_by}",
+#		"redact_fields": ["{field_1}", "{field_2}"],
+#		"partial": 1,
+#	},
+#	{
+#		"doctype": "{doctype_2}",
+#		"filter_by": "{filter_by}",
+#		"partial": 1,
+#	},
+#	{
+#		"doctype": "{doctype_3}",
+#		"strict": False,
+#	},
+#	{
+#		"doctype": "{doctype_4}"
+#	}
 # ]
 
 # Authentication and authorization
 # --------------------------------
 
 # auth_hooks = [
-# 	"new_i.auth.validate"
+#	"new_i.auth.validate"
 # ]
-
-# Automatically update python controller files with type annotations for this app.
-# export_python_type_annotations = True
-
-# default_log_clearing_doctypes = {
-# 	"Logging DocType Name": 30  # days to retain logs
-# }
-

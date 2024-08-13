@@ -1,0 +1,2 @@
+import{k as e,x as s,i as l}from"./index-29a91f62.js";const t=e(!1),n=e(!1);s({url:"new_i.api.whatsapp.is_whatsapp_enabled",cache:"Is Whatsapp Enabled",auto:!0,onSuccess:a=>{t.value=!!a}});s({url:"new_i.api.whatsapp.is_whatsapp_installed",cache:"Is Whatsapp Installed",auto:!0,onSuccess:a=>{n.value=!!a}});const o=e(!1);s({url:"new_i.integrations.twilio.api.is_enabled",cache:"Is Twilio Enabled",auto:!0,onSuccess:a=>{o.value=!!a}});const c=e(!1),p=l(()=>window.innerWidth<768);export{n as a,o as c,p as i,c as m,t as w};
+//# sourceMappingURL=settings-01f42b9c.js.map
